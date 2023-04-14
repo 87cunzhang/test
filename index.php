@@ -1,5 +1,6 @@
 <?php
 require_once './vendor/autoload.php';
+require_once './Demo.php';
 class redisLock
 {
     private $redis;
@@ -8,12 +9,20 @@ class redisLock
     {
         try {
             $this->redis = new Redis();
-            $this->redis->connect('47.92.232.152', 6379);
+            $this->redis->connect('47.92.232.152');
             $this->redis->auth('3.14@.com');
+        }catch (Exception $e) {
+            echo $e->getMessage();
         }finally{
-            echo 1234;
+            $this->redis->close();
         }
 
+    }
+
+    public function demoAdd()
+    {
+        $demo = new Demo\Demo();
+        $demo->exists('ji1n');
     }
 
 
@@ -47,5 +56,5 @@ class redisLock
 }
 
 $instance = new redisLock();
-//$instance->lock();
+$instance->demo_add();
 
