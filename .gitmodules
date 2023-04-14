@@ -2,5 +2,5 @@
 	path = bloomFilter
 	url = git@github.com:87cunzhang/bloomFilter.git
 [submodule "redisSingleTon"]
-    path = redisSingleTon
-    url = git@github.com:87cunzhang/redisSingleTon.git
+	path = redisSingleTon
+	url = git@github.com:87cunzhang/redisSingleTon.git
