@@ -1,6 +1,7 @@
 {
     "require": {
         "predis/predis": "^2.1",
-        "spatie/async": "^1.5"
+        "spatie/async": "^1.5",
+        "ext-json": "*"
     }
 }

@@ -1,21 +1,51 @@
 <?php
-echo 456;die;
-header("Cache-Control: no-cache, must-revalidate");
-header("Expires: Sat, 1 Jan 2000 00:00:00 GMT");
 require_once './vendor/autoload.php';
-$redis = new Predis\Client(
-    [
-        'scheme'   => 'tcp',
-        'host'     => '47.92.232.152',
-        'password' => '3.14@.com',
-    ]
-);
-$lock_key = 'lock';
-$uuid = uniqid();
-while($redis->set($lock_key, $uuid, 'NX', 'EX', 30) == false) {
-    //等待20ms
-    usleep(20000);
+class redisLock
+{
+    private $redis;
+
+    public function __construct()
+    {
+        try {
+            $this->redis = new Redis();
+            $this->redis->connect('47.92.232.152', 6379);
+            $this->redis->auth('3.14@.com');
+        }finally{
+            echo 1234;
+        }
+
+    }
+
+
+
+    public function lock()
+    {
+        $lock_key = 'lock';
+        $uuid     = uniqid('jwl:');
+        while ($this->redis->set($lock_key, $uuid, 'NX', 'EX', 10) == false) {
+            //自旋等待20ms
+            usleep(20000);
+        }
+        $inventory = $this->redis->get('inventory');
+        if ($inventory > 0) {
+            $this->redis->set('inventory', --$inventory);
+            echo json_encode(['code' => 200, 'msg' => 'success:' . $inventory]);
+        } else {
+            echo json_encode(['code' => 400, 'msg' => 'fail']);
+        }
+
+        $lua_script = '
+            if redis.call("get",KEYS[1]) == ARGV[1] then
+                return redis.call("del",KEYS[1])
+            else
+                return 0
+            end';
+        $this->redis->eval($lua_script, 1, $lock_key, $uuid);
+    }
+
+
 }
-$res   = $redis->incr('aaa');
-$redis->del($lock_key);
-echo $res;
+
+$instance = new redisLock();
+//$instance->lock();
+
