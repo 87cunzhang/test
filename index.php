@@ -1,10 +1,4 @@
 <?php
-//测试8
-//测试7
-//测试6
-//测试5
-//测试3
-//测试2
 function processData($data,$callback){
     $result = $callback($data);
     echo "处理结果:".$result;
