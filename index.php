@@ -23,3 +23,5 @@ function quickSort($arr)
 }
 
 quickSort([3, 2, 1, 5, 4, 6, 7, 8, 9, 0]);
+quickSort([3, 2, 1, 5, 4, 6, 7, 8, 9, 0]);
+quickSort([3, 2, 1, 5, 4, 6, 7, 8, 9, 0]);
