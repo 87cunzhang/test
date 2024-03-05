@@ -23,4 +23,3 @@ function quickSort($arr)
 }
 
 quickSort([0]);
-quickSort([0]);
